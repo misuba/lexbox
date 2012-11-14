@@ -1,0 +1,36 @@
+section.box, section.nobox {
+  overflow: hidden;
+  padding: 10px;
+  margin: 10px 10px 10px 0; }
+  section.box:after, section.nobox:after {
+    content: "";
+    height: 0px;
+    clear: both; }
+  section.box h2, section.nobox h2 {
+    margin: 0 0 6px 0; }
+
+section.box {
+  border: 1px solid black; }
+
+article.text {
+  float: left;
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 0 10px 10px 0;
+  position: relative; }
+  article.text h3 {
+    margin: 0 0 6px 0; }
+  article.text div.ctrls {
+    position: absolute;
+    bottom: 10px;
+    /* and what the hell: */
+    overflow: hidden;
+    text-align: right; }
+    article.text div.ctrls:after {
+      content: "";
+      height: 0px;
+      clear: both; }
+    article.text div.ctrls a.btn {
+      margin: 0 3px; }

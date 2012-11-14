@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lexbox</title>
+    <link rel='stylesheet' href='/css/bootstrap.css' />
+    <link rel='stylesheet' href='/css/lexbox.css' />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row-fluid">
+
+        <% if (text == null) text = {title: '', body: ''}; %>
+        <% var newtext = text.title == '' && text.body == ''; %>
+        <div class="ctrls span2">
+
+          <h1>Lexbox</h1>
+
+          <p>future controls will go here</p>
+
+          <% if (err) { %>
+            <div class="alert alert-error"><%= err %></div>
+          <% } %>
+
+        </div>
+        <div class="content span10">
+          <form method="POST" action="<%= newtext ? '/texts/new' : '/' + text.slug %>">
+
+            <input type="text" name="title" value="<%= text.title %>" placeholder="Enter title" style="width: 97%;" /><br />
+            <textarea name="body" id="body" wrap="virtual" style="width: 97%;" rows="20"><%= text.body %></textarea>
+
+            <div class="pull-right">
+              <input type="submit" name="go" id="go" value="Save" />
+            </div>
+
+            <% if (!newtext) { %>
+              <input type="hidden" name="id" id="id" value="<%= text._id %>" />
+            <% } %>
+          </form>
+        </div>
+        
+      </div>
+    </div>
+  </body>
+</html>

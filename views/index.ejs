@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lexbox</title>
+    <link rel='stylesheet' href='/css/bootstrap.css' />
+    <link rel='stylesheet' href='/css/lexbox.css' />
+  </head>
+  <body>
+    <form method="post" action="/box">
+      <div class="container-fluid">
+        <div class="row-fluid">
+
+          <div class="ctrls span2">
+
+            <h1>Lexbox</h1>
+
+            <p id="boxctrls">
+              Add selected to box named:<br />
+              <input type="text" name="name" id="boxname" /><br />
+              <input type="checkbox" name="tag" id="tagthese" checked="checked" />
+              <label for="tagthese">Tag with box name</label><br />
+              <input type="submit" name="dotag" id="dotag" value="Do it" />
+            </p>
+
+          </div>
+
+          <div class="content span10">
+            
+            <% _(_(texts).groupBy('box')).each(function(box) { %>
+              
+              <section class="<%= box[0].box ? 'box' : 'nobox' %>">
+                <% if (box[0].box) { %>
+                  <h2><%= box[0].box %></h2>
+                <% } %>
+              
+                <% box.forEach(function(text) { %>
+                  <article class="text">
+                    <h3><%= text.title %></h3>
+                    <p><%= text.summary %></p>
+
+                    <div class="ctrls">
+                      <input type="checkbox" class="seltext" name="box[texts]" value="<%= text._id %>" />
+                      <a class="btn" href="/<%= text.slug %>">Edit</a>
+                    </div>
+
+
+                  </article>
+                <% }); %>
+
+              </section>
+            <% }); %>
+
+            <a class="btn btn-info" href="/texts/new">New text</a>
+          </div>
+
+        </div>
+      </div>
+
+    </form>
+  </body>
+</html>

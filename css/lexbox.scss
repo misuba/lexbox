@@ -1,0 +1,51 @@
+@mixin clearme {
+  overflow: hidden;
+  &:after {
+    content: "";
+    height: 0px;
+    clear: both;
+  }
+}
+
+@mixin pull-down($margin: 10px) {
+  position: absolute;
+  bottom: $margin;
+  /* and what the hell: */
+  @include clearme;
+}
+
+section.box, section.nobox {
+  @include clearme;
+
+  padding: 10px;
+  margin: 10px 10px 10px 0;
+  
+  h2 {
+    margin: 0 0 6px 0;
+  }
+}
+section.box { border: 1px solid black; }
+
+article.text {
+  float: left;
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 0 10px 10px 0;
+  position: relative;
+
+  h3 {
+    margin: 0 0 6px 0;
+  }
+
+  div.ctrls {
+    @include pull-down;
+    text-align: right;
+
+    a.btn {
+      float: right;
+      margin: 0 3px;
+    }
+  }
+}
