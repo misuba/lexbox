@@ -47,4 +47,14 @@ describe("texts", function() {
     var mytext = new LText({title: "hello sailor", body: "hmfm", tags: "doing"});
     expect(mytext.hasTag("doing")).toBeTruthy();
   });
+
+  it("should box itself up", function() {
+    var mytext = new LText({title: "hello sailor", body: "hmfm", tags: "doing"});
+    mytext.boxUp("fireplace");
+    expect(mytext.box.name).toEqual("fireplace");
+    expect(mytext.hasTag("fireplace")).toBeTruthy();
+    mytext.boxUp("dungeon", false);
+    expect(mytext.box.name).toEqual("dungeon");
+    expect(mytext.hasTag("dungeon")).toBeFalsy();
+  });
 });

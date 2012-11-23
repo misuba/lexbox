@@ -4,6 +4,9 @@
     <title>Lexbox</title>
     <link rel='stylesheet' href='/css/bootstrap.css' />
     <link rel='stylesheet' href='/css/lexbox.css' />
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/textinputs_jquery_src.js"></script>
   </head>
   <body>
     <div class="container-fluid">
@@ -11,7 +14,7 @@
 
         <% if (text == null) text = {title: '', body: ''}; %>
         <% var newtext = text.title == '' && text.body == ''; %>
-        <div class="ctrls span2">
+        <nav class="ctrls span2">
 
           <h1>Lexbox</h1>
 
@@ -21,7 +24,7 @@
             <div class="alert alert-error"><%= err %></div>
           <% } %>
 
-        </div>
+        </nav>
         <div class="content span10">
           <form method="POST" action="<%= newtext ? '/texts/new' : '/' + text.slug %>">
 
@@ -40,5 +43,16 @@
         
       </div>
     </div>
+
+    <script type="text/javascript">
+      $(function(){
+        $("#textctrls").on("click", ".linkbtn", function(){
+          var tspan = $("#body").getSelection();
+          $("#body").replaceSelectedText("_linkcode(" + tspan.text + ") or whatever");
+        });
+        
+      });
+    </script>
+
   </body>
 </html>

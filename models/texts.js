@@ -28,8 +28,9 @@ var text_s = Schema({
   body: { type: String, required: true },
   summary: String,
   tags: [{name: String}],
-  box: Schema.Types.ObjectId,
-  alive: { type: Boolean, default: true }
+  box: { type: Schema.Types.ObjectId, ref: 'LBox' },
+  alive: { type: Boolean, default: true },
+  createdDate: { type: Date, default: Date.now }
 });
 
 text_s.path('tags').set(function(towhat) {
@@ -61,6 +62,16 @@ text_s.methods.removeTag = function(which) {
     var names = _(this.tags).map(function(tg) { return tg.name; });
     delete this.tags[names.indexOf(which)];    
   }
+};
+
+text_s.methods.boxUp = function(boxname, addtag) {
+  if (addtag == null) addtag = true;
+  LBox.findOneAndUpdate(
+    {name: boxname}, {name: boxname, createdDate: new Date()}, {upsert: true}, 
+    function(err, box) {
+      
+    }
+  );
 };
 
 exports.schema = text_s;

@@ -26,10 +26,12 @@ section.box, section.nobox {
 }
 section.box { border: 1px solid black; }
 
+$textboxW: 200px;
+
 article.text {
   float: left;
-  width: 200px;
-  height: 200px;
+  width: $textboxW;
+  height: $textboxW;
   border: 1px solid black;
   padding: 10px;
   margin: 0 10px 10px 0;
@@ -42,6 +44,7 @@ article.text {
   div.ctrls {
     @include pull-down;
     text-align: right;
+    width: $textboxW;
 
     a.btn {
       float: right;

@@ -3,14 +3,24 @@
  * Module dependencies.
  */
 
-var MONGO_URL = "mongodb://localhost/lexbox-local";
+var MONGO_URL = "mongodb://localhost/lexbox-local",
+    WORDNIK_KEY = "c26e51e2797378f15b40d0f95190b07b5b903a610af7c5a94",
+    COOKIE_SECRET = "calamity is all fireworks reset";
 
 var express = require('express')
   , http = require('http')
   , path = require('path')
-  , _ = require('underscore');
+  , _ = require('underscore')
+  , hbs = require('hbs');
 
 var app = express();
+
+// handlebars is not auto-magic enough to have a default way to do partials
+// and so we do this, before setting it up as the view engine:
+var parts = fs.readdirSync('./views/partials');
+parts.forEach(function(partpath) {
+  hbs.registerPartial(path.basename(partpath), fs.readFileSync(partpath, 'utf8'));
+});
 
 // express on its own is pretty bare-bones
 // so the next superficially forbidding section is all about making it do basic webby things
@@ -18,13 +28,13 @@ var app = express();
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
-  app.set('view options', { layout: 'layout' });
+  app.set('view engine', 'hbs');
+  app.set('view options', { layout: 'layout' }); // see if this still works
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser('calamity is all fireworks reset'));
+  app.use(express.cookieParser(COOKIE_SECRET));
   app.use(express.session());
   //app.use(app.router);
   app.use(require('node-sass').middleware({src: __dirname, dest: __dirname + '/public', debug: true}));
@@ -38,17 +48,32 @@ app.configure('development', function(){
 // require models
 var mongoose = require('mongoose'),
     db = mongoose.connect(MONGO_URL),
-    LText = db.model('LText', require('models/texts').schema);
+    LBox = db.model('LBox', require('./models/boxes').schema),
+    LText = db.model('LText', require('./models/texts').schema);
 
 var errout = function(req, res, err, tmpl, goods) {
   if (req.xhr) res.send({err: err});
   else {
-    res.render(tmpl, Object.extend(goods, {err: err, _: _}));
+    res.render(tmpl, _.extend(goods, {err: err, _: _}));
   }
 };
+var endHappily = function(req, res, dest) {
+  if (req.xhr) res.send("ok");
+  else res.redirect(dest);
+}
+
+/*
+// this will be what to use once I find a good async lib
+var finishout = function(req, res, err, tmpl, goods) {
+  if (req.xhr) res.send(err ? {err: err} : ._extend({ok: 'ok'}, goods);
+  else {
+    res.render(tmpl, _.extend(goods, {err: err, _: _}));
+  }
+}
+*/
 
 app.get('/', function(req, res) {
-  LText.find(function(err, texts) {
+  LText.find().populate("box").exec(function(err, texts) {
     res.render('index', {err: err, texts: texts, _: _});
   });
 });
@@ -71,13 +96,48 @@ app.post('/:slug', function(req, res) {
         console.log("save cb");
         if (err2) errout(req, res, err2, "text", {text: text});
         else {
-          if (req.xhr) res.send("ok");
-          else res.redirect("/");
+          endHappily(req, res, '/');
         }
       });
     }
   });
 });
+
+app.post("/boxes/new", function(req, res) {
+  console.log(req.body);
+  //res.send("m");
+  LText.find().where('_id').in(req.body.box.texts).exec(function(finderr, texts) {
+    if (finderr) errout(req, res, finderr, "index");
+    else {
+      if (texts.length) {
+        if (req.body.dobox == "Do it") {
+          LBox.findOneAndUpdate({name: req.body.name}, {name: req.body.name, createdDate: new Date()}, 
+              {upsert: true}, function(saverr, nubox) {
+            if (saverr) errout(req, res, saverr, 'index');
+            else {
+              _(texts).each(function(txt) {
+                LText.update({ _id: txt._id }, { $set: { box: nubox._id }}).exec();
+              });
+              endHappily(req, res, '/');
+            }
+          });
+        }
+        else if (req.body.unbox == "Remove selected") {
+          _(texts).each(function(txt) {
+            LText.update({ _id: txt._id }, { $set: { box: null }}).exec();
+          });
+          endHappily(req, res, '/');
+        }
+      }
+    }
+  });
+});
+
+app.get("/history", function(req,res) {
+  LEvent.getHistory(function(histerr, evts) {
+    res.send(histerr ? {err: histerr} : {ok: "ok", history: evts});
+  });
+})
 
 app.get('/texts/new', function(req, res) {
   res.render('text', {err: null, text: { title: '', body: '', tags: [], box: null }, _: _});
