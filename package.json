@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "express": "3.0.0rc5",
-    "ejs": "*",
+    "hbs": "*",
     "node-sass": "*",
     "underscore": "*",
     "mongoose": ">= 3.3.1"
