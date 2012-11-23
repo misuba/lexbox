@@ -1,0 +1,11 @@
+<section class="{{#if this[0].hasBox()}}box{{else}}nobox{{/if}}">
+  
+  {{#if this[0].hasBox()}}
+    <h2>{{this[0].box.name}}</h2>
+  {{/if}}
+
+  {{#each this}}
+    {{> textbox}}
+  {{/each}}
+
+</section>

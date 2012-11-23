@@ -8,7 +8,7 @@
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/textinputs_jquery_src.js"></script>
   </head>
-  <body>
+  <body id="edittext">
     <div class="container-fluid">
       <div class="row-fluid">
 
@@ -25,11 +25,11 @@
           <% } %>
 
         </nav>
-        <div class="content span10">
+        <article class="content span10">
           <form method="POST" action="<%= newtext ? '/texts/new' : '/' + text.slug %>">
 
-            <input type="text" name="title" value="<%= text.title %>" placeholder="Enter title" style="width: 97%;" /><br />
-            <textarea name="body" id="body" wrap="virtual" style="width: 97%;" rows="20"><%= text.body %></textarea>
+            <input type="text" name="title" id="title" value="<%= text.title %>" placeholder="Enter title" /><br />
+            <textarea name="body" id="body" wrap="virtual" rows="20"><%= text.body %></textarea>
 
             <div class="pull-right">
               <input type="submit" name="go" id="go" value="Save" />
@@ -39,7 +39,7 @@
               <input type="hidden" name="id" id="id" value="<%= text._id %>" />
             <% } %>
           </form>
-        </div>
+        </article>
         
       </div>
     </div>
