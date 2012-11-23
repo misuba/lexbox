@@ -27,10 +27,12 @@ article.text {
     bottom: 10px;
     /* and what the hell: */
     overflow: hidden;
-    text-align: right; }
+    text-align: right;
+    width: 200px; }
     article.text div.ctrls:after {
       content: "";
       height: 0px;
       clear: both; }
     article.text div.ctrls a.btn {
+      float: right;
       margin: 0 3px; }
