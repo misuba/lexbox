@@ -1,3 +1,4 @@
+/*
 describe("events", function() {
   var mongoose = require('mongoose'),
       db = mongoose.connect("mongodb://localhost/lexbox-test"),
@@ -16,3 +17,4 @@ describe("events", function() {
   it("gets last 50 historic events");
 
 });
+*/

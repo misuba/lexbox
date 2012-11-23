@@ -1,7 +1,8 @@
 describe("texts", function() {
   var mongoose = require('mongoose'),
       db = mongoose.connect("mongodb://localhost/lexbox-test"),
-      LText = db.model('LText', require('../models/texts').schema);
+      LText = db.model('LText', require('../models/texts').schema),
+      LBox = db.model('LBox', require('../models/boxes').schema);
 
   // something to clear the db collection
 
@@ -48,13 +49,15 @@ describe("texts", function() {
     expect(mytext.hasTag("doing")).toBeTruthy();
   });
 
-  it("should box itself up", function() {
-    var mytext = new LText({title: "hello sailor", body: "hmfm", tags: "doing"});
-    mytext.boxUp("fireplace");
-    expect(mytext.box.name).toEqual("fireplace");
-    expect(mytext.hasTag("fireplace")).toBeTruthy();
-    mytext.boxUp("dungeon", false);
-    expect(mytext.box.name).toEqual("dungeon");
-    expect(mytext.hasTag("dungeon")).toBeFalsy();
+  it("should succinctly tell us about its box's presence", function(){
+    var mytext = new LText({title: "hello sailor", body: "hmfm"});
+    expect(mytext.hasBox).toBeFalsy();
+    LBox.create({name:"yeah"}, function(err,box) {
+      mytext.box = box;
+      expect(mytext.hasBox).toBeTruthy();
+      mytext.box = null;
+      expect(mytext.hasBox).toBeFalsy();
+    });
   });
+
 });
