@@ -10,6 +10,7 @@ var MONGO_URL = "mongodb://localhost/lexbox-local",
 var express = require('express')
   , http = require('http')
   , path = require('path')
+  , fs = require('fs')
   , _ = require('underscore')
   , hbs = require('hbs');
 
@@ -19,17 +20,22 @@ var app = express();
 // and so we do this, before setting it up as the view engine:
 var parts = fs.readdirSync('./views/partials');
 parts.forEach(function(partpath) {
-  hbs.registerPartial(path.basename(partpath), fs.readFileSync(partpath, 'utf8'));
+  hbs.registerPartial(path.basename(partpath), 
+    fs.readFileSync(path.resolve('views/partials', partpath), 'utf8')
+  );
 });
+
+//apply our std helper lib
+require('./helpers').applyTo(hbs);
 
 // express on its own is pretty bare-bones
 // so the next superficially forbidding section is all about making it do basic webby things
-// the cookie parser secret should be changed for every install, though.
+// the cookie parser secret should be changed for every install above.
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'hbs');
-  app.set('view options', { layout: 'layout' }); // see if this still works
+  app.set("view options", { layout: false }) 
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -60,7 +66,7 @@ var errout = function(req, res, err, tmpl, goods) {
 var endHappily = function(req, res, dest) {
   if (req.xhr) res.send("ok");
   else res.redirect(dest);
-}
+};
 
 /*
 // this will be what to use once I find a good async lib
@@ -74,7 +80,7 @@ var finishout = function(req, res, err, tmpl, goods) {
 
 app.get('/', function(req, res) {
   LText.find().populate("box").exec(function(err, texts) {
-    res.render('index', {err: err, texts: texts, _: _});
+    res.render('index', {err: err, texts: texts, boxen: _(_(texts).groupBy("box")), _: _});
   });
 });
 
