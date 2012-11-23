@@ -64,14 +64,8 @@ text_s.methods.removeTag = function(which) {
   }
 };
 
-text_s.methods.boxUp = function(boxname, addtag) {
-  if (addtag == null) addtag = true;
-  LBox.findOneAndUpdate(
-    {name: boxname}, {name: boxname, createdDate: new Date()}, {upsert: true}, 
-    function(err, box) {
-      
-    }
-  );
-};
+text_s.virtual('hasBox').get(function () {
+  return typeof this.box !== 'undefined' && this.box != null;
+});
 
 exports.schema = text_s;
