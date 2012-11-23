@@ -52,3 +52,20 @@ article.text {
     }
   }
 }
+
+body#edittext {
+  form {
+    color: black;
+    border: none;
+
+    input#title {
+      margin-top: 12px;
+      font-size: 2.2em;
+      font-weight: bold;
+    }
+    textarea#body {
+      font-size: 1.25em;
+      line-height: 1.6em;
+    }
+  }
+}
