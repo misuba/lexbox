@@ -1,3 +1,10 @@
+nav.ctrls p {
+  margin: 32px 0px; }
+nav.ctrls label {
+  display: inline; }
+nav.ctrls #dobox {
+  margin-top: 6px; }
+
 section.box, section.nobox {
   overflow: hidden;
   padding: 10px;
@@ -7,28 +14,31 @@ section.box, section.nobox {
     height: 0px;
     clear: both; }
   section.box h2, section.nobox h2 {
-    margin: 0 0 6px 0; }
+    margin: 0 0 6px 0;
+    font-size: 1.7em; }
 
 section.box {
   border: 1px solid black; }
 
 article.text {
   float: left;
-  width: 200px;
-  height: 200px;
+  width: 140px;
+  height: 140px;
   border: 1px solid black;
-  padding: 10px;
-  margin: 0 10px 10px 0;
+  padding: 7px;
+  margin: 0 7px 7px 0;
   position: relative; }
   article.text h3 {
-    margin: 0 0 6px 0; }
+    margin: 0 0 6px 0;
+    line-height: 1.1em;
+    font-size: 1.3em; }
   article.text div.ctrls {
     position: absolute;
     bottom: 10px;
     /* and what the hell: */
     overflow: hidden;
     text-align: right;
-    width: 200px; }
+    width: 140px; }
     article.text div.ctrls:after {
       content: "";
       height: 0px;
@@ -36,3 +46,19 @@ article.text {
     article.text div.ctrls a.btn {
       float: right;
       margin: 0 3px; }
+
+body#edittext form {
+  color: black;
+  margin-bottom: 12px; }
+  body#edittext form input#title {
+    margin-top: 12px;
+    font-size: 2.2em;
+    font-weight: bold;
+    border: none;
+    width: 100%;
+    height: 1.0em; }
+  body#edittext form textarea#body {
+    font-size: 1.25em;
+    line-height: 1.6em;
+    border: none;
+    width: 100%; }

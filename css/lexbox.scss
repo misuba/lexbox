@@ -14,6 +14,18 @@
   @include clearme;
 }
 
+nav.ctrls {
+  p {
+    margin: 32px 0px;
+  }
+
+  label {
+    display: inline;
+  }
+
+  #dobox {margin-top: 6px;}
+}
+
 section.box, section.nobox {
   @include clearme;
 
@@ -22,23 +34,26 @@ section.box, section.nobox {
   
   h2 {
     margin: 0 0 6px 0;
+    font-size: 1.7em;
   }
 }
 section.box { border: 1px solid black; }
 
-$textboxW: 200px;
+$textboxW: 140px;
 
 article.text {
   float: left;
   width: $textboxW;
   height: $textboxW;
   border: 1px solid black;
-  padding: 10px;
-  margin: 0 10px 10px 0;
+  padding: ($textboxW * 0.05);
+  margin: 0 ($textboxW * 0.05) ($textboxW * 0.05) 0;
   position: relative;
 
   h3 {
     margin: 0 0 6px 0;
+    line-height: 1.1em;
+    font-size: 1.3em;
   }
 
   div.ctrls {
@@ -56,16 +71,23 @@ article.text {
 body#edittext {
   form {
     color: black;
-    border: none;
+    margin-bottom: 12px;
 
     input#title {
       margin-top: 12px;
       font-size: 2.2em;
       font-weight: bold;
+      border: none;
+      width: 100%;
+      height: 1.0em;
     }
+
     textarea#body {
       font-size: 1.25em;
       line-height: 1.6em;
+      border: none;
+      width: 100%;
     }
+
   }
 }
