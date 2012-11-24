@@ -1,0 +1,10 @@
+<article class="text">
+  <h3><%= text.title %></h3>
+  <p><%= text.summary %></p>
+
+  <div class="ctrls">
+    <input type="checkbox" class="seltext" name="box[texts]" value="<%= text._id %>" />
+    <a class="btn" href="/<%= text.slug %>">Edit</a>
+  </div>
+
+</article>

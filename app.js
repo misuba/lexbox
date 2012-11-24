@@ -12,10 +12,11 @@ var express = require('express')
   , path = require('path')
   , fs = require('fs')
   , _ = require('underscore')
-  , hbs = require('hbs');
+  , cons = require('consolidate');
 
 var app = express();
 
+/*
 // handlebars is not auto-magic enough to have a default way to do partials
 // and so we do this, before setting it up as the view engine:
 var parts = fs.readdirSync('./views/partials');
@@ -27,22 +28,25 @@ parts.forEach(function(partpath) {
 
 //apply our std helper lib
 require('./helpers').applyTo(hbs);
+*/
 
 // express on its own is pretty bare-bones
 // so the next superficially forbidding section is all about making it do basic webby things
 // the cookie parser secret should be changed for every install above.
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
+  
+  app.engine('ejs', cons.ejs);
+  app.set("view engine", "ejs");
   app.set('views', __dirname + '/views');
-  app.set('view engine', 'hbs');
-  app.set("view options", { layout: false }) 
+  
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser(COOKIE_SECRET));
   app.use(express.session());
-  //app.use(app.router);
+  
   app.use(require('node-sass').middleware({src: __dirname, dest: __dirname + '/public', debug: true}));
   app.use(express.static(path.join(__dirname, 'public')));
 });
@@ -80,7 +84,14 @@ var finishout = function(req, res, err, tmpl, goods) {
 
 app.get('/', function(req, res) {
   LText.find().populate("box").exec(function(err, texts) {
-    res.render('index', {err: err, texts: texts, boxen: _(_(texts).groupBy("box")), _: _});
+    if (err) errout(req, res, err, 'index', texts);
+    var boxen = _(texts).groupBy("box"),
+        boxtest = function(box, boxkey) {
+          return boxkey == 'undefined' || boxkey == 'null';
+        };
+    var boxes = _.reject(boxen, boxtest);
+    var unboxed = _.flatten(_.values(_.filter(boxen, boxtest)));
+    res.render('index', {err: err, boxes: boxes, unboxed: unboxed, _: _});
   });
 });
 
@@ -128,7 +139,7 @@ app.post("/boxes/new", function(req, res) {
             }
           });
         }
-        else if (req.body.unbox == "Remove selected") {
+        else if (req.body.unbox == "Unbox selected") {
           _(texts).each(function(txt) {
             LText.update({ _id: txt._id }, { $set: { box: null }}).exec();
           });

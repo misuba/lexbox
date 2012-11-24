@@ -5,16 +5,16 @@
     <link rel='stylesheet' href='/css/bootstrap.css' />
     <link rel='stylesheet' href='/css/lexbox.css' />
 
-    <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/textinputs_jquery_src.js"></script>
+    <!-- script type="text/javascript" src="/js/jquery.min.js"></script -->
+    <!-- script type="text/javascript" src="/js/textinputs_jquery_src.js"></script -->
   </head>
   <body id="edittext">
-    <div class="container-fluid">
-      <div class="row-fluid">
+    <div class="container">
+      <div class="row">
 
         <% if (text == null) text = {title: '', body: ''}; %>
         <% var newtext = text.title == '' && text.body == ''; %>
-        <nav class="ctrls span2">
+        <nav class="ctrls span3">
 
           <h1>Lexbox</h1>
 
@@ -25,7 +25,7 @@
           <% } %>
 
         </nav>
-        <article class="content span10">
+        <article class="content span9">
           <form method="POST" action="<%= newtext ? '/texts/new' : '/' + text.slug %>">
 
             <input type="text" name="title" id="title" value="<%= text.title %>" placeholder="Enter title" /><br />
@@ -45,13 +45,13 @@
     </div>
 
     <script type="text/javascript">
-      $(function(){
+      /* $(function(){
         $("#textctrls").on("click", ".linkbtn", function(){
           var tspan = $("#body").getSelection();
           $("#body").replaceSelectedText("_linkcode(" + tspan.text + ") or whatever");
         });
         
-      });
+      }); */
     </script>
 
   </body>
