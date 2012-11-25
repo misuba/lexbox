@@ -3,10 +3,6 @@
  * Module dependencies.
  */
 
-var MONGO_URL = "mongodb://localhost/lexbox-local",
-    WORDNIK_KEY = "c26e51e2797378f15b40d0f95190b07b5b903a610af7c5a94",
-    COOKIE_SECRET = "calamity is all fireworks reset";
-
 var express = require('express')
   , http = require('http')
   , path = require('path')
@@ -16,19 +12,8 @@ var express = require('express')
 
 var app = express();
 
-/*
-// handlebars is not auto-magic enough to have a default way to do partials
-// and so we do this, before setting it up as the view engine:
-var parts = fs.readdirSync('./views/partials');
-parts.forEach(function(partpath) {
-  hbs.registerPartial(path.basename(partpath), 
-    fs.readFileSync(path.resolve('views/partials', partpath), 'utf8')
-  );
-});
-
-//apply our std helper lib
-require('./helpers').applyTo(hbs);
-*/
+// read in the config
+var LConf = JSON.parse(fs.readFileSync("./config.json"));
 
 // express on its own is pretty bare-bones
 // so the next superficially forbidding section is all about making it do basic webby things
@@ -40,11 +25,13 @@ app.configure(function(){
   app.set("view engine", "ejs");
   app.set('views', __dirname + '/views');
   
+  app.set("mongo_url", LConf.MONGO_URL);
+
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser(COOKIE_SECRET));
+  app.use(express.cookieParser(LConf.COOKIE_SECRET));
   app.use(express.session());
   
   app.use(require('node-sass').middleware({src: __dirname, dest: __dirname + '/public', debug: true}));
@@ -57,7 +44,7 @@ app.configure('development', function(){
 
 // require models
 var mongoose = require('mongoose'),
-    db = mongoose.connect(MONGO_URL),
+    db = mongoose.connect(LConf.MONGO_URL),
     LBox = db.model('LBox', require('./models/boxes').schema),
     LText = db.model('LText', require('./models/texts').schema);
 

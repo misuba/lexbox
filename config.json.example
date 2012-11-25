@@ -1,0 +1,5 @@
+{
+  "MONGO_URL": "mongodb://mongo url to your db goes here",
+  "WORDNIK_KEY": "your key to the wordnik api, or leave it blank if you're not using those features",
+  "COOKIE_SECRET": "this can be random gibberish, but make it unique for each site"
+}
