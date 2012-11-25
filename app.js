@@ -58,6 +58,10 @@ var endHappily = function(req, res, dest) {
   if (req.xhr) res.send("ok");
   else res.redirect(dest);
 };
+var endComplaining = function(req, res, dest, err) {
+  if (req.xhr) res.send({err: err});
+  else res.redirect(dest + "?err=" + encodeURIComponent(err));
+}
 
 /*
 // this will be what to use once I find a good async lib
@@ -111,26 +115,36 @@ app.post("/boxes/new", function(req, res) {
   console.log(req.body);
   //res.send("m");
   LText.find().where('_id').in(req.body.box.texts).exec(function(finderr, texts) {
-    if (finderr) errout(req, res, finderr, "index");
+    if (finderr) endComplaining(req, res, '/', finderr);
     else {
-      if (texts.length) {
+      var unhandledTextCt = texts.length;
+      if (unhandledTextCt > 0) {
         if (req.body.dobox == "Do it") {
-          LBox.findOneAndUpdate({name: req.body.name}, {name: req.body.name, createdDate: new Date()}, 
-              {upsert: true}, function(saverr, nubox) {
-            if (saverr) errout(req, res, saverr, 'index');
+          LBox.findOneAndUpdate(
+              {name: req.body.name}, 
+              {name: req.body.name, createdDate: new Date()}, 
+              {upsert: true}, 
+              function(saverr, nubox) {
+            if (saverr) endComplaining(req, res, '/', saverr);
             else {
               _(texts).each(function(txt) {
-                LText.update({ _id: txt._id }, { $set: { box: nubox._id }}).exec();
+                txt.box = nubox;
+                if (req.body.tag) txt.addTag(req.body.name);
+                txt.save(function(tsaverr, txt) {
+                  if (err) endComplaining(req, res, '/', tsaverr);
+                  else {
+                    if (--unhandledTextCt <= 0) endHappily(req, res, '/'); // fake async, woooo!!! *sigh*
+                  }
+                });
               });
-              endHappily(req, res, '/');
             }
           });
         }
         else if (req.body.unbox == "Unbox selected") {
           _(texts).each(function(txt) {
             LText.update({ _id: txt._id }, { $set: { box: null }}).exec();
+            if (--unhandledTextCt <= 0) endHappily(req, res, '/');
           });
-          endHappily(req, res, '/');
         }
       }
     }
