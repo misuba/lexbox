@@ -131,7 +131,7 @@ app.post("/boxes/new", function(req, res) {
                 txt.box = nubox;
                 if (req.body.tag) txt.addTag(req.body.name);
                 txt.save(function(tsaverr, txt) {
-                  if (err) endComplaining(req, res, '/', tsaverr);
+                  if (tsaverr) endComplaining(req, res, '/', tsaverr);
                   else {
                     if (--unhandledTextCt <= 0) endHappily(req, res, '/'); // fake async, woooo!!! *sigh*
                   }
