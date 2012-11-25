@@ -18,11 +18,18 @@
 
           <h1>Lexbox</h1>
 
-          <p>future controls will go here</p>
-
           <% if (err) { %>
             <div class="alert alert-error"><%= err %></div>
           <% } %>
+          
+          <section id="tags">
+            Tagged:
+            <ul>
+              <% text.tags.forEach(function(tag) { %>
+                <li><%= tag.name %></li>
+              <% }) %>
+            </li>
+          </section>
 
         </nav>
         <article class="content span9">
