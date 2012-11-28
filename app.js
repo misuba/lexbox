@@ -7,6 +7,7 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
+  , querystring = require('querystring')
   , _ = require('underscore')
   , cons = require('consolidate');
 
@@ -60,7 +61,7 @@ var endHappily = function(req, res, dest) {
 };
 var endComplaining = function(req, res, dest, err) {
   if (req.xhr) res.send({err: err});
-  else res.redirect(dest + "?err=" + encodeURIComponent(err));
+  else res.redirect(dest + "?err=" + encodeURIComponent(querystring.stringify(err)));
 }
 
 /*
