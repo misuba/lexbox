@@ -75,7 +75,7 @@ var finishout = function(req, res, err, tmpl, goods) {
 */
 
 app.get('/', function(req, res) {
-  LText.find().populate("box").exec(function(err, texts) {
+  LText.find({alive: true}).populate("box").exec(function(err, texts) {
     if (err) errout(req, res, err, 'index', texts);
     var boxen = _(texts).groupBy("box"),
         boxtest = function(box, boxkey) {
@@ -109,6 +109,12 @@ app.post('/:slug', function(req, res) {
         }
       });
     }
+  });
+});
+
+app.get('/:slug/remove', function(req, res) {
+  LText.update({slug: req.params.slug}, { $set: { alive: false }}, function(err) {
+    endHappily(req, res, '/');
   });
 });
 
@@ -159,7 +165,7 @@ app.get("/history", function(req,res) {
 })
 
 app.get('/texts/new', function(req, res) {
-  res.render('text', {err: null, text: { title: '', body: '', tags: [], box: null }, _: _});
+  res.render('text', {err: null, newtext: true, text: { title: '', body: '', tags: [], box: null }, _: _});
 });
 
 app.post('/texts/new', function(req, res) {
