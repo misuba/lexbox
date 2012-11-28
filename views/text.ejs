@@ -1,73 +1,49 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Lexbox</title>
-    <link rel='stylesheet' href='/css/bootstrap.css' />
-    <link rel='stylesheet' href='/css/lexbox.css' />
+<% var pageId = "edittext", pageTitle = text.title; %>
+<% if (typeof newtext == 'undefined') newtext = false; %>
+<% include header %>
 
-    <!-- script type="text/javascript" src="/js/jquery.min.js"></script -->
-    <!-- script type="text/javascript" src="/js/textinputs_jquery_src.js"></script -->
-  </head>
-  <body id="edittext">
-    <div class="container">
-      <div class="row">
-        <form method="POST" action="<%= newtext ? '/texts/new' : '/' + text.slug %>">
-        
-          <% if (text == null) text = {title: '', body: ''}; %>
-          <% var newtext = text.title == '' && text.body == ''; %>
-          <nav class="ctrls span3">
+<form method="POST" action="<%= newtext ? '/texts/new' : '/' + text.slug %>">
 
-            <h1>Lexbox</h1>
+  <nav class="ctrls span3">
 
-            <% if (err) { %>
-              <div class="alert alert-error"><%= err %></div>
-            <% } %>
-            
-            <section id="tags">
-              Tagged:
-              <ul>
-                <% text.tags.forEach(function(tag, tagnum) { %>
-                  <input type="hidden" name="tags[]" value="<%= tag.name %>" />
-                  <li>
-                    <%= tag.name %>
-                    <a href="/<%= text.slug %>/tags/<%= tagnum %>/remove" class="btn btn-mini btn-danger" rel="nofollow">x</a>
-                  </li>
-                <% }) %>
-              </ul>
-              
-              Add: <input type="text" name="newtag" id="newtag" value="" placeholder="new tag" />
-              <input type="submit" name="dotag" id="dotag" value="Add" />
-            </section>
+    <h1>Lexbox</h1>
 
-          </nav>
-          <article class="content span9">
+    <% if (err) { %>
+      <div class="alert alert-error"><%= err %></div>
+    <% } %>
+    
+    <section id="tags">
+      Tagged:
+      <ul>
+        <% text.tags.forEach(function(tag, tagnum) { %>
+          <input type="hidden" name="tags[]" value="<%= tag.name %>" />
+          <li>
+            <%= tag.name %>
+            <a href="/<%= text.slug %>/tags/<%= tagnum %>/remove" class="btn btn-mini btn-danger" rel="nofollow">x</a>
+          </li>
+        <% }) %>
+      </ul>
+      
+      Add: <input type="text" name="newtag" id="newtag" value="" placeholder="new tag" />
+      <input type="submit" name="dotag" id="dotag" value="Add" />
+    </section>
 
-              <input type="text" name="title" id="title" value="<%= text.title %>" placeholder="Enter title" /><br />
-              <textarea name="body" id="body" wrap="virtual" rows="20"><%= text.body %></textarea>
+  </nav>
+  <article class="content span9">
 
-              <div class="pull-right">
-                <input type="submit" name="go" id="go" value="Save" />
-              </div>
+      <input type="text" name="title" id="title" value="<%= text.title %>" placeholder="Enter title" /><br />
+      <textarea name="body" id="body" wrap="virtual" rows="20"><%= text.body %></textarea>
 
-              <% if (!newtext) { %>
-                <input type="hidden" name="id" id="id" value="<%= text._id %>" />
-              <% } %>
-            
-          </article>
-          
-        </form>
+      <div class="pull-right">
+        <input type="submit" name="go" id="go" value="Save" />
       </div>
-    </div>
 
-    <script type="text/javascript">
-      /* $(function(){
-        $("#textctrls").on("click", ".linkbtn", function(){
-          var tspan = $("#body").getSelection();
-          $("#body").replaceSelectedText("_linkcode(" + tspan.text + ") or whatever");
-        });
-        
-      }); */
-    </script>
+      <% if (!newtext) { %>
+        <input type="hidden" name="id" id="id" value="<%= text._id %>" />
+      <% } %>
+    
+  </article>
+  
+</form>
 
-  </body>
-</html>
+<% include footer %>
