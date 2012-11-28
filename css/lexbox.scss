@@ -79,6 +79,13 @@ body#edittext {
     color: black;
     margin-bottom: 12px;
 
+    #newtag {
+      width: 50%;
+    }
+    #dotag {
+      display: inline;
+    }
+
     input#title {
       margin-top: 12px;
       font-size: 2.2em;

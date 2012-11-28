@@ -55,6 +55,10 @@ article.text {
 body#edittext form {
   color: black;
   margin-bottom: 12px; }
+  body#edittext form #newtag {
+    width: 50%; }
+  body#edittext form #dotag {
+    display: inline; }
   body#edittext form input#title {
     margin-top: 12px;
     font-size: 2.2em;
