@@ -11,43 +11,51 @@
   <body id="edittext">
     <div class="container">
       <div class="row">
-
-        <% if (text == null) text = {title: '', body: ''}; %>
-        <% var newtext = text.title == '' && text.body == ''; %>
-        <nav class="ctrls span3">
-
-          <h1>Lexbox</h1>
-
-          <% if (err) { %>
-            <div class="alert alert-error"><%= err %></div>
-          <% } %>
-          
-          <section id="tags">
-            Tagged:
-            <ul>
-              <% text.tags.forEach(function(tag) { %>
-                <li><%= tag.name %></li>
-              <% }) %>
-            </li>
-          </section>
-
-        </nav>
-        <article class="content span9">
-          <form method="POST" action="<%= newtext ? '/texts/new' : '/' + text.slug %>">
-
-            <input type="text" name="title" id="title" value="<%= text.title %>" placeholder="Enter title" /><br />
-            <textarea name="body" id="body" wrap="virtual" rows="20"><%= text.body %></textarea>
-
-            <div class="pull-right">
-              <input type="submit" name="go" id="go" value="Save" />
-            </div>
-
-            <% if (!newtext) { %>
-              <input type="hidden" name="id" id="id" value="<%= text._id %>" />
-            <% } %>
-          </form>
-        </article>
+        <form method="POST" action="<%= newtext ? '/texts/new' : '/' + text.slug %>">
         
+          <% if (text == null) text = {title: '', body: ''}; %>
+          <% var newtext = text.title == '' && text.body == ''; %>
+          <nav class="ctrls span3">
+
+            <h1>Lexbox</h1>
+
+            <% if (err) { %>
+              <div class="alert alert-error"><%= err %></div>
+            <% } %>
+            
+            <section id="tags">
+              Tagged:
+              <ul>
+                <% text.tags.forEach(function(tag, tagnum) { %>
+                  <input type="hidden" name="tags[]" value="<%= tag.name %>" />
+                  <li>
+                    <%= tag.name %>
+                    <a href="/<%= text.slug %>/tags/<%= tagnum %>/remove" class="btn btn-mini btn-danger" rel="nofollow">x</a>
+                  </li>
+                <% }) %>
+              </ul>
+              
+              Add: <input type="text" name="newtag" id="newtag" value="" placeholder="new tag" />
+              <input type="submit" name="dotag" id="dotag" value="Add" />
+            </section>
+
+          </nav>
+          <article class="content span9">
+
+              <input type="text" name="title" id="title" value="<%= text.title %>" placeholder="Enter title" /><br />
+              <textarea name="body" id="body" wrap="virtual" rows="20"><%= text.body %></textarea>
+
+              <div class="pull-right">
+                <input type="submit" name="go" id="go" value="Save" />
+              </div>
+
+              <% if (!newtext) { %>
+                <input type="hidden" name="id" id="id" value="<%= text._id %>" />
+              <% } %>
+            
+          </article>
+          
+        </form>
       </div>
     </div>
 
