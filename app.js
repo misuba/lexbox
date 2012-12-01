@@ -64,18 +64,11 @@ var texts_ctrl = require('./controllers/texts_ctrl').control({LBox: LBox, LText:
 
 app.get('/', boxes_ctrl.index);
 
-app.get('/:slug', function(req, res) {
-  texts_ctrl.fetch(req, res, texts_ctrl.show);
-});
-
-app.post('/:slug', function(req, res) {
-  texts_ctrl.fetch(req, res, texts_ctrl.edit);
-});
-
 /* sadly the server-side version of this has to do a bunch of pulling apart the request
 to find out what's _really_ being asked of us. the ajaxy actions will be much more ReSTful. */
 app.post("/boxes", function(req, res) {
-  var dels = _.filter(req.body, function(key){ return key.indexOf("del_")===0; });
+  var dels = _.filter(_.keys(req.body), function(key){ return key.indexOf("del_")===0; });
+  
   if (dels.length) {
     texts_ctrl.remove(req, res, dels);
   }
@@ -85,6 +78,7 @@ app.post("/boxes", function(req, res) {
   else if (req.body.unbox) {
     boxes_ctrl.fetch(req, res, boxes_ctrl.unbox);
   }
+  else res.send(500);
 });
 
 app.get("/history", function(req,res) {
@@ -108,6 +102,15 @@ app.post('/texts/new', function(req, res) {
     }
   });
   
+});
+
+/* and if it isn't any of the above, it's a text */
+app.get('/:slug', function(req, res) {
+  texts_ctrl.fetch(req, res, texts_ctrl.show);
+});
+
+app.post('/:slug', function(req, res) {
+  texts_ctrl.fetch(req, res, texts_ctrl.edit);
 });
 
 http.createServer(app).listen(app.get('port'), function(){
