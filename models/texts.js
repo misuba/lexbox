@@ -44,9 +44,19 @@ text_s.path('tags').set(function(towhat) {
 });
 
 text_s.pre('save', function (next) {
-  this.summary = this.body.substr(0,50);
   this.slug = slugify(this.title);
   next();
+});
+
+text_s.virtual('displaySummary').get(function(){
+  if (this.summary == "" || this.summary == null) {
+    return this.body.substr(0,50);
+  }
+  return this.summary;
+});
+
+text_s.virtual('hasBox').get(function () {
+  return typeof this.box !== 'undefined' && this.box != null;
 });
 
 text_s.methods.hasTag = function(name) {
@@ -63,9 +73,5 @@ text_s.methods.removeTag = function(which) {
     delete this.tags[names.indexOf(which)];    
   }
 };
-
-text_s.virtual('hasBox').get(function () {
-  return typeof this.box !== 'undefined' && this.box != null;
-});
 
 exports.schema = text_s;

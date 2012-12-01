@@ -6,13 +6,13 @@ describe("texts", function() {
 
   // something to clear the db collection
 
-  it("should create with properly formed slug and summary", function() {
+  it("should create with properly formed slug and auto-fake-summary", function() {
     var mytext = new LText({title: "hello testy's test!", 
       body: "It's like a wave hello It's like a wave hello It's like a wave hello It's like a wave hello It's like a wave hello "});
     mytext.save(function(err, text) {
       expect(text.title).toEqual("hello testy's test!"); // little sanity check, i dunno
       expect(text.slug).toEqual("hello-testys-test");
-      expect(text.summary).toEqual("It's like a wave hello It's like a wave hello It's");
+      expect(text.displaySummary).toEqual("It's like a wave hello It's like a wave hello It's");
     });
   });
 
