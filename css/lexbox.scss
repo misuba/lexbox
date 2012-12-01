@@ -39,15 +39,16 @@ section.box, section.nobox {
 }
 section.box { border: 1px solid black; }
 
-$textboxW: 140px;
+$textboxW: 190px;
+$textboxH: 140px;
 
 article.text {
   float: left;
   width: $textboxW;
-  height: $textboxW;
+  height: $textboxH;
   border: 1px solid black;
-  padding: ($textboxW * 0.05);
-  margin: 0 ($textboxW * 0.05) ($textboxW * 0.05) 0;
+  padding: ($textboxH * 0.05);
+  margin: 0 ($textboxH * 0.05) ($textboxH * 0.05) 0;
   position: relative;
 
   h3 {

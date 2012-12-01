@@ -1,6 +1,6 @@
 <article class="text">
   <h3><a href="/<%= text.slug %>"><%= text.title %></a></h3>
-  <p><%= text.summary %></p>
+  <p><%=: text.summary | truncate:60 %></p>
 
   <div class="ctrls">
     <input type="checkbox" class="seltext" name="box[texts]" value="<%= text._id %>" />
