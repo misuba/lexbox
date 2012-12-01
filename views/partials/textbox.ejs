@@ -5,7 +5,7 @@
   <div class="ctrls">
     <input type="checkbox" class="seltext" name="box[texts]" value="<%= text._id %>" />
     <a class="btn" href="/<%= text.slug %>">Edit</a>
-    <a class="btn btn-danger btn-mini" href="/<%= text.slug %>/remove" rel="nofollow">X</a>
+    <input type="submit" name="del_<%= text._id %>" value="x" class="btn btn-danger btn-mini" />
   </div>
 
 </article>
