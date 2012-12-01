@@ -6,7 +6,7 @@
 
   <nav class="ctrls span3">
 
-    <h1>Lexbox</h1>
+    <h1><a href="/">Lexbox</a></h1>
 
     <% if (err) { %>
       <div class="alert alert-error"><%= err %></div>
@@ -27,6 +27,12 @@
       Add: <input type="text" name="newtag" id="newtag" value="" placeholder="new tag" />
       <input type="submit" name="dotag" id="dotag" value="Add" />
     </section>
+
+    <section id="essences">
+      Summary:
+      <textarea id="summary" name="summary"><%= text.summary %></textarea>
+    </section>
+
 
   </nav>
   <article class="content span9">
