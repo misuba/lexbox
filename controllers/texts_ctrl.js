@@ -21,8 +21,8 @@ exports.control = function(models) {
     },
 
     edit: function(req, res, text) {
-      
       text.title = req.body.title;
+      text.summary = req.body.summary;
       text.body = req.body.body;
       text.tags = req.body.tags || [];
       text.save(function(err, text) {
