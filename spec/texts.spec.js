@@ -60,4 +60,12 @@ describe("texts", function() {
     });
   });
 
+  it("should give the first 50 chars of the body as displaySummary until we have a real summary", function(){
+    var mytext = new LText({title: "hello displaySummary", 
+      body: "It's like a wave hello It's like a wave hello It's like a wave hello It's like a wave hello It's like a wave hello "});
+    expect(mytext.displaySummary).toEqual("It's like a wave hello It's like a wave hello It's");
+    mytext.summary = "Jack Krak the Motherfucker";
+    expect(mytext.displaySummary).toEqual("Jack Krak the Motherfucker");
+  });
+
 });
