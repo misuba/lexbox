@@ -5,6 +5,9 @@ nav.ctrls label {
 nav.ctrls #dobox {
   margin-top: 6px; }
 
+div.content {
+  margin: 10px; }
+
 section.box, section.nobox {
   overflow: hidden;
   padding: 10px;
@@ -22,7 +25,7 @@ section.box {
 
 article.text {
   float: left;
-  width: 190px;
+  width: 200px;
   height: 140px;
   border: 1px solid black;
   padding: 7px;
@@ -37,17 +40,23 @@ article.text {
       text-decoration: none; }
       article.text h3 a :hover {
         text-decoration: underline; }
+  article.text .seltext {
+    position: absolute;
+    top: 0px;
+    right: 5px; }
   article.text div.ctrls {
     position: absolute;
     bottom: 10px;
     /* and what the hell: */
     overflow: hidden;
     text-align: right;
-    width: 190px; }
+    width: 200px; }
     article.text div.ctrls:after {
       content: "";
       height: 0px;
       clear: both; }
+    article.text div.ctrls input {
+      float: left; }
     article.text div.ctrls a.btn {
       float: right;
       margin: 0 3px; }

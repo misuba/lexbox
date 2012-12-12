@@ -26,6 +26,10 @@ nav.ctrls {
   #dobox {margin-top: 6px;}
 }
 
+div.content {
+  margin: 10px;
+}
+
 section.box, section.nobox {
   @include clearme;
 
@@ -39,7 +43,7 @@ section.box, section.nobox {
 }
 section.box { border: 1px solid black; }
 
-$textboxW: 190px;
+$textboxW: 200px;
 $textboxH: 140px;
 
 article.text {
@@ -63,11 +67,21 @@ article.text {
     }
   }
 
+  .seltext {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+  }
+
   div.ctrls {
     @include pull-down;
     text-align: right;
     width: $textboxW;
 
+    input {
+      float: left;
+    }
+    
     a.btn {
       float: right;
       margin: 0 3px;
