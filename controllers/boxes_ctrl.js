@@ -1,6 +1,5 @@
 exports.control = function(models) {
   var LBox = models.LBox,
-      LText = models.LText,
       _ = require('underscore'),
       errout = require('../utils').errout,
       endComplaining = require('../utils').endComplaining,
@@ -8,15 +7,10 @@ exports.control = function(models) {
 
   return {
     index: function(req, res) {
-      LText.find({alive: true}).populate("box").exec(function(err, texts) {
+      LBox.find({alive: true}).populate("children").exec(function(err, texts) {
         if (err) errout(req, res, err, 'index', texts);
-        var boxen = _(texts).groupBy("box"),
-            boxtest = function(box, boxkey) {
-              return boxkey == 'undefined' || boxkey == 'null';
-            };
-        var boxes = _.reject(boxen, boxtest);
-        var unboxed = _.flatten(_.values(_.filter(boxen, boxtest)));
-        res.render('index', {err: err, boxes: boxes, unboxed: unboxed, _: _});
+        console.log("texts === ", texts);
+        res.render('index', {err: err, boxes: texts, _: _});
       });
     },
 

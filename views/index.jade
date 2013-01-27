@@ -1,0 +1,54 @@
+extends layout
+
+mixin renderBox(box)
+  article(class='text' + box.children.length>0 ? ' parent' : '')
+    h3
+      a(href='/'+box.slug) title
+    - if (box.displaySummary.length)
+      p box.displaySummary.substr(0,60)
+
+    - each child in box.children
+      mixin renderBox(child)
+
+    input.seltext(type='checkbox', name='box[texts]', value=box._id)
+    .ctrls
+      a.btn(href='/'+box.slug) Edit
+      input.btn.btn-danger.btn-mini(type='submit', name='del_'+box._id, value='x')
+    
+block body
+  div.container
+    form.row(method='post', action='/boxes')
+    
+      nav.ctrls.span3
+        h1
+          a(href='/') Lexbox
+        section#boxctrls
+          p
+            | Add selected to box named:
+            br
+            input#boxname(type='text', name='name')
+            br
+            input#tagthese(type='checkbox', name='tag', checked='checked')
+            label(for='tagthese') Tag with box name
+            br
+            input#dobox(type='submit', name='dobox', value='Do it')
+          p
+            input#unbox(type='submit', name='unbox', value='Unbox selected')
+            p
+              p
+                label(for='boxcolor') Color selected box:
+                input#boxcolor(type='text', name='boxcolor', value='', placeholder='hex or English')
+                br
+                input#colorbox(type='submit', name='colorbox', value='Paint')
+      .content.span9
+        nav.topnbottom.top
+          a.btn.btn-info(href='/texts/new') New text
+
+        - if (boxes.length)
+          - each box in boxes
+            mixin renderBox(box)
+        - else
+          p No boxes.
+
+        nav.topnbottom.bottom
+          a.btn.btn-info(href='/texts/new') New text

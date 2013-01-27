@@ -7,8 +7,7 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
-  , _ = require('underscore')
-  , cons = require('consolidate');
+  , _ = require('underscore');
 
 var app = express();
 
@@ -17,12 +16,11 @@ var LConf = JSON.parse(fs.readFileSync("./config.json"));
 
 // express on its own is pretty bare-bones
 // so the next superficially forbidding section is all about making it do basic webby things
-// the cookie parser secret should be changed for every install above.
+// the cookie parser secret should be changed for every install in config.json
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   
-  app.engine('ejs', cons.ejs);
-  app.set("view engine", "ejs");
+  app.set("view engine", "jade");
   app.set('views', __dirname + '/views');
   
   app.set("mongo_url", LConf.MONGO_URL);
