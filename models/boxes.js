@@ -37,7 +37,7 @@ BoxSchema.add({
   hideChildren: { type: Boolean, default: false },
 
   children: [{ type: Schema.Types.ObjectId, ref: 'LBox' }]
-}); 
+});
 
 
 BoxSchema.path('tags').set(function(towhat) {
@@ -74,7 +74,7 @@ BoxSchema.methods.addTag = function(name) {
 BoxSchema.methods.removeTag = function(which) {
   if (this.hasTag(which)) {
     var names = _(this.tags).map(function(tg) { return tg.name; });
-    delete this.tags[names.indexOf(which)];    
+    delete this.tags[names.indexOf(which)];
   }
 };
 
@@ -97,7 +97,7 @@ BoxSchema.methods.addChild = function(obj, callback) {
     self.save(function(selferr, self) {
       if (selferr) return callback(selferr);
       callback(err, newmodel);
-    })
+    });
   });
 };
 
@@ -124,5 +124,9 @@ BoxSchema.methods.moveTo = function(newparent, index, callback) {
     }
   });
 };
+
+BoxSchema.static('findLiving', function (callback) {
+  return this.find({ alive: true }).populate("children").exec(callback);
+});
 
 exports.schema = BoxSchema;

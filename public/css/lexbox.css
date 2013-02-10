@@ -8,25 +8,17 @@ nav.ctrls #dobox {
 div.content {
   margin: 10px; }
 
-section.box, section.nobox {
-  overflow: hidden;
-  padding: 10px;
-  margin: 10px 10px 10px 0; }
-  section.box:after, section.nobox:after {
+.topnbottom {
+  margin: 6px 0px; }
+
+section.boxes {
+  overflow: hidden; }
+  section.boxes:after {
     content: "";
     height: 0px;
     clear: both; }
-  section.box h2, section.nobox h2 {
-    margin: 0 0 6px 0;
-    font-size: 1.7em; }
-
-section.box {
-  border: 1px solid black; }
 
 article.text {
-  float: left;
-  width: 200px;
-  height: 140px;
   border: 1px solid black;
   padding: 7px;
   margin: 0 7px 7px 0;
@@ -45,12 +37,8 @@ article.text {
     top: 0px;
     right: 5px; }
   article.text div.ctrls {
-    position: absolute;
-    bottom: 10px;
-    /* and what the hell: */
-    overflow: hidden;
     text-align: right;
-    width: 200px; }
+    overflow: hidden; }
     article.text div.ctrls:after {
       content: "";
       height: 0px;
@@ -61,21 +49,21 @@ article.text {
       float: right;
       margin: 0 3px; }
 
-body#edittext form {
+.edittext form {
   color: black;
   margin-bottom: 12px; }
-  body#edittext form #newtag {
+  .edittext form #newtag {
     width: 50%; }
-  body#edittext form #dotag {
+  .edittext form #dotag {
     display: inline; }
-  body#edittext form input#title {
+  .edittext form input#title {
     margin-top: 12px;
     font-size: 2.2em;
     font-weight: bold;
     border: none;
     width: 100%;
     height: 1.0em; }
-  body#edittext form textarea#body {
+  .edittext form textarea#body {
     font-size: 1.25em;
     line-height: 1.6em;
     border: none;

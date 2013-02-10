@@ -30,29 +30,18 @@ div.content {
   margin: 10px;
 }
 
-section.box, section.nobox {
-  @include clearme;
-
-  padding: 10px;
-  margin: 10px 10px 10px 0;
-  
-  h2 {
-    margin: 0 0 6px 0;
-    font-size: 1.7em;
-  }
+.topnbottom {
+  margin: 6px 0px;
 }
-section.box { border: 1px solid black; }
 
-$textboxW: 200px;
-$textboxH: 140px;
+section.boxes {
+  @include clearme;
+}
 
 article.text {
-  float: left;
-  width: $textboxW;
-  height: $textboxH;
   border: 1px solid black;
-  padding: ($textboxH * 0.05);
-  margin: 0 ($textboxH * 0.05) ($textboxH * 0.05) 0;
+  padding: 7px;
+  margin: 0 7px 7px 0;
   position: relative;
 
   h3 {
@@ -74,10 +63,9 @@ article.text {
   }
 
   div.ctrls {
-    @include pull-down;
     text-align: right;
-    width: $textboxW;
-
+    @include clearme;
+    
     input {
       float: left;
     }
@@ -89,7 +77,7 @@ article.text {
   }
 }
 
-body#edittext {
+.edittext {
   form {
     color: black;
     margin-bottom: 12px;

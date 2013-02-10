@@ -1,18 +1,18 @@
 extends layout
 
 mixin renderBox(box)
-  article(class='text' + box.children.length>0 ? ' parent' : '')
+  article.text
     h3
-      a(href='/'+box.slug) title
-    - if (box.displaySummary.length)
-      p box.displaySummary.substr(0,60)
+      a(href='/' + box.slug)= box.name
+    - if (box.displaySummary && box.displaySummary.length)
+      p.summary= box.displaySummary
 
     - each child in box.children
       mixin renderBox(child)
 
     input.seltext(type='checkbox', name='box[texts]', value=box._id)
     .ctrls
-      a.btn(href='/'+box.slug) Edit
+      a.btn(href='/' + box.slug) Edit
       input.btn.btn-danger.btn-mini(type='submit', name='del_'+box._id, value='x')
     
 block body
@@ -42,13 +42,14 @@ block body
                 input#colorbox(type='submit', name='colorbox', value='Paint')
       .content.span9
         nav.topnbottom.top
-          a.btn.btn-info(href='/texts/new') New text
+          a.btn.btn-info(href='/boxes/new') New text
 
-        - if (boxes.length)
-          - each box in boxes
-            mixin renderBox(box)
-        - else
-          p No boxes.
+        section.boxes
+          - if (boxes.length)
+            - each box in boxes
+              mixin renderBox(box)
+          - else
+            p No boxes.
 
         nav.topnbottom.bottom
-          a.btn.btn-info(href='/texts/new') New text
+          a.btn.btn-info(href='/boxes/new') New text

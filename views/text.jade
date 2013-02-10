@@ -1,0 +1,46 @@
+extends layout
+
+block body
+  div.container.edittext
+    form.row(method='post', action='/#{text ? text.name : 'boxes/'}')
+    
+      nav.ctrls.span3
+        h1: a(href='/') Lexbox
+
+        if err
+          div.alert.alert-error #{err}
+        
+        section#tags
+          | Tagged:
+          if text && text.tags.length
+            ul
+              - each tag, tagindex in text.tags
+                input(type='hidden', name='tags[]', value=tag.name)
+
+                li
+                  |= tag.name
+                  a.btn.btn-mini.btn-danger(href=text.slug+'/tags/'+tagindex+'/remove', rel='nofollow') x
+          else
+            ul
+              li: em None yet
+
+          | Add:
+          input#newtag(type='text', name='newtag', value='', placeholder='new tag')
+          input#dotag(type='submit', name='dotag', value='Add')
+
+        section#essences
+          | Summary:
+          textarea#summary(name="summary")= (text ? text.summary : '')
+
+      article.content.span9
+
+        input#title(type='text', name='name', value=(text ? text.name : ''), placeholder='Enter name')
+        br
+        textarea#body(name='body', wrap='virtual', rows='20')= (text ? text.body : '')
+
+        .topnbottom.bottom.pull-right
+          input#go(type='submit', name='go', value='Save')
+
+        if text && text.name.length
+          input#id(type='hidden', name='id', value=text._id)
+

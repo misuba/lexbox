@@ -1,53 +1,67 @@
 exports.control = function(models) {
   var LBox = models.LBox,
-      _ = require('underscore'),
-      errout = require('../utils').errout,
-      endComplaining = require('../utils').endComplaining,
-      endHappily = require('../utils').endHappily;
+      _ = require('underscore');
+
+  function finish(res, err, tmpl, goods) {
+    res.render(tmpl, _.extend(goods, {err: err, _: _}));
+  }
+
+  function finishBoxToRoot(res, err, box) {
+    if (err) finish(res, err, "text", {text: box});
+    else res.redirect('/');
+  }
 
   return {
     index: function(req, res) {
-      LBox.find({alive: true}).populate("children").exec(function(err, texts) {
-        if (err) errout(req, res, err, 'index', texts);
-        console.log("texts === ", texts);
-        res.render('index', {err: err, boxes: texts, _: _});
+      LBox.findLiving(function(err, texts) { //.populate("children")
+        //if (err) errout(req, res, err, 'index', texts);
+        console.log("texts ===", texts);
+        finish(res, err, 'index', {boxes: texts});
       });
     },
 
-    fetch: function(req, res, callback) {
-      LText.find().where('_id').in(req.body.box.texts).exec(function(err, texts) {
+    show: function(req, res) {
+      LBox.findOne({slug: req.params.slug}, function(err, box) {
         if (err) res.send(500);
-        else callback(req, res, texts);
+        else if (box === null) res.send(404);
+        else finish(res, err, 'text', {text: box});
       });
     },
 
-    create: function(req, res, texts) {
-      var unhandledTextCt = texts.length;
-      LBox.findOneAndUpdate(
-          {name: req.body.name}, 
-          {name: req.body.name, createdDate: new Date()}, 
-          {upsert: true}, 
-          function(saverr, nubox) {
-        if (saverr) endComplaining(req, res, '/', saverr);
-        else {
-          _(texts).each(function(txt) {
-            txt.box = nubox;
-            if (req.body.tag) txt.addTag(req.body.name);
-            txt.save(function(tsaverr, txt) {
-              if (tsaverr) endComplaining(req, res, '/', tsaverr);
-              else {
-                if (--unhandledTextCt <= 0) endHappily(req, res, '/'); // fake async, woooo!!! *sigh*
-              }
-            });
-          });
-        }
+    newbox: function(req, res) {
+      finish(res, null, 'text', {text: { name: '', body: '', tags: [], children: [] } });
+    },
+
+    create: function(req, res, callback) {
+      var nuu = new LBox({
+        name: req.body.name,
+        summary: req.body.summary,
+        body: req.body.body,
+        tags: req.body.tags || []
+      });
+      nuu.save(function(err, box) {
+        finishBoxToRoot(res, err, box);
       });
     },
 
-    unbox: function(req, res, texts) {
+    update: function(req, res) {
+      LBox.update({_id: req.body.id}, { $set: {
+        name: req.body.name, summary: req.body.summary, body: req.body.body, tags: req.body.tags || []
+      } }, function(err, box) {
+        finishBoxToRoot(res, err, box);
+      });
+    },
+
+    remove: function(req, res, box) {
+      LBox.update({_id: box.id}, { $set: { alive: false } }, function(err, box) {
+        finishBoxToRoot(res, err, box);
+      });
+    },
+
+    unbox: function(req, res, box) {
       var unhandledTextCt = texts.length;
       _(texts).each(function(txt) {
-        LText.update({ _id: txt._id }, { $set: { box: null }}).exec();
+        LBox.update({ _id: txt._id }, { $set: { box: null }}).exec();
         if (--unhandledTextCt <= 0) endHappily(req, res, '/');
       });
     }
