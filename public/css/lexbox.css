@@ -1,4 +1,4 @@
-nav.ctrls p {
+nav.ctrls form {
   margin: 32px 0px; }
 nav.ctrls label {
   display: inline; }
@@ -29,21 +29,24 @@ article.text {
       text-decoration: none; }
       article.text h3 a :hover {
         text-decoration: underline; }
+  article.text .summary {
+    overflow: hidden;
+    height: 1.3em; }
   article.text .seltext {
     position: absolute;
     top: 0px;
     right: 5px; }
-  article.text form.ctrls {
+  article.text .ctrls {
     text-align: right;
     margin-bottom: 0;
     overflow: hidden; }
-    article.text form.ctrls:after {
+    article.text .ctrls:after {
       content: "";
       height: 0px;
       clear: both; }
-    article.text form.ctrls input {
+    article.text .ctrls input {
       float: left; }
-    article.text form.ctrls a.btn {
+    article.text .ctrls a.btn {
       float: right;
       margin: 0 3px; }
 

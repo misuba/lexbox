@@ -15,7 +15,7 @@
 }
 
 nav.ctrls {
-  p {
+  form {
     margin: 32px 0px;
   }
 
@@ -63,7 +63,7 @@ article.text {
     right: 5px;
   }
 
-  form.ctrls {
+  .ctrls {
     text-align: right;
     margin-bottom: 0;
     @include clearme;

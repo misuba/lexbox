@@ -10,44 +10,44 @@ mixin renderBox(box)
     - each child in box.children
       mixin renderBox(child)
 
-    input.seltext(type='checkbox', name='box[texts]', value=box._id)
-    form.ctrls(action='/' + box.slug, method='POST')
-      
+    input.seltext(type='checkbox', name='boxids[]', value=box._id)
+    .ctrls
       a.btn(href='/' + box.slug) Edit
       input.btn.btn-danger.btn-mini(type='submit', name='del_'+box._id, value='x')
-      input(type='hidden', name='_method', value='DELETE')
-    
+
 block body
   div.container
     
-    nav.ctrls.span3
-      h1
-        a(href='/') Lexbox
-      section#boxctrls
-        p
-          | Tag selected with:
-          br
-          input#boxname(type='text', name='tagname')
-          br
-          input#dobox(type='submit', name='dobox', value='Do it')
-        
-        p
-          label(for='boxcolor') Color selected:
-          input#boxcolor(type='text', name='boxcolor', value='', placeholder='hex or English')
-          br
-          input#colorbox(type='submit', name='colorbox', value='Paint')
+    form(action='/boxes/manage', method='POST')
+      nav.ctrls.span3
+        h1
+          a(href='/') Lexbox
+        section#boxctrls
+          p
+            | Tag selected with:
+            br
+            input#boxname(type='text', name='tagname')
+            br
+            input#dobox(type='submit', name='dotags', value='Do it')
+          
+          p
+            label(for='boxcolor') Color selected:
+            input#boxcolor(type='text', name='boxcolor', value='', placeholder='hex or English')
+            br
+            input#colorbox(type='submit', name='colorbox', value='Paint')
 
 
-    .content.span9
-      nav.topnbottom.top
-        a.btn.btn-info(href='/boxes/new') New text
+      .content.span9
+        nav.topnbottom.top
+          a.btn.btn-info(href='/boxes/new') New text
 
-      section.boxes
-        - if (boxes.length)
-          - each box in boxes
-            mixin renderBox(box)
-        - else
-          p No boxes.
+        section.boxes
+          - if (boxes.length)
+            - each box in boxes
+              mixin renderBox(box)
+          - else
+            p No boxes.
 
-      nav.topnbottom.bottom
-        a.btn.btn-info(href='/boxes/new') New text
+        nav.topnbottom.bottom
+          a.btn.btn-info(href='/boxes/new') New text
+

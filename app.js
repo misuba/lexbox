@@ -54,8 +54,21 @@ app.post('/boxes/', boxes_ctrl.create);
 
 app.get('/:slug', boxes_ctrl.show);
 app.put('/:slug', boxes_ctrl.update);
-app.delete('/:slug', boxes_ctrl.remove);
+//app.delete('/:slug', boxes_ctrl.remove);
 
+app.post('/boxes/manage', function(req, res) {
+  var dels = _.filter(_.keys(req.body), function(key){
+    return key.indexOf("del_")===0;
+  });
+  
+  if (dels.length) {
+    var del = dels[0].match(/del_(.+)/)[1];
+    boxes_ctrl.remove(req, res, del);
+  }
+  else if (req.body.dotags == 'Do it') {
+    boxes_ctrl.tag(req, res);
+  }
+});
 
 /*
 app.get("/history", function(req,res) {

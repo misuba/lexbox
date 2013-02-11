@@ -57,8 +57,8 @@ exports.control = function(models) {
       });
     },
 
-    remove: function(req, res) {
-      LBox.findOne({slug: req.params.slug}, function(err, box) {
+    remove: function(req, res, id) {
+      LBox.findOne({_id: id}, function(err, box) {
         box.alive = false;
         box.save(function(saverr, savedbox) {
           res.redirect("/");
@@ -66,13 +66,26 @@ exports.control = function(models) {
       });
     },
 
-    unbox: function(req, res, box) {
-      var unhandledTextCt = texts.length;
-      _(texts).each(function(txt) {
-        LBox.update({ _id: txt._id }, { $set: { box: null }}).exec();
-        if (--unhandledTextCt <= 0) endHappily(req, res, '/');
+    tag: function(req, res) {
+      LBox.find({_id: { $in: req.body.boxids }}, function(err, boxes) {
+        if (err) res.redirect('/');
+        else {
+          var box,
+              saveCt = 0,
+              boxsavehandler = function(serr) {
+                if (!serr) {
+                  if (++saveCt == boxes.length) res.redirect('/');
+                }
+              };
+          for (var r = boxes.length; r > 0; r--) {
+            box = boxes[r - 1];
+            box.addTag(req.body.tagname);
+            box.save(boxsavehandler);
+          }
+        }
       });
     }
+
   };
 
 };

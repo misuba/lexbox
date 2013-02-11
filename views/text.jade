@@ -17,8 +17,7 @@ block body
               - each tag, tagindex in text.tags
                 input(type='hidden', name='tags[]', value=tag.name)
 
-                li
-                  |= tag.name
+                li= tag.name
                   a.btn.btn-mini.btn-danger(href=text.slug+'/tags/'+tagindex+'/remove', rel='nofollow') x
           else
             ul
