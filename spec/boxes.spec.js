@@ -14,7 +14,7 @@ describe("boxes' basic text functions", function() {
     mytext.save(function(err, text) {
       expect(text.name).to.equal("hello testy's test!");
       expect(text.slug).to.equal("hello-testys-test");
-      expect(text.displaySummary).to.equal("It's like a wave hello It's like a wave hello It's");
+      expect(text.displaySummary).to.equal(text.body);
 
       done();
     });
@@ -55,10 +55,10 @@ describe("boxes' basic text functions", function() {
     expect(mytext.hasTag("doing")).to.be.true;
   });
 
-  it("should give the first 50 chars of the body as displaySummary until we have a real summary", function(){
+  it("should give the first para of the body as displaySummary until we have a real summary", function(){
     var mytext = new LBox({name: "hello displaySummary",
       body: "It's like a wave hello It's like a wave hello It's like a wave hello It's like a wave hello It's like a wave hello "});
-    expect(mytext.displaySummary).to.equal("It's like a wave hello It's like a wave hello It's");
+    expect(mytext.displaySummary).to.equal("It's like a wave hello It's like a wave hello It's like a wave hello It's like a wave hello It's like a wave hello ");
     mytext.summary = "Jack Krak the Motherfucker";
     expect(mytext.displaySummary).to.equal("Jack Krak the Motherfucker");
   });

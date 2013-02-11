@@ -5,9 +5,6 @@ nav.ctrls label {
 nav.ctrls #dobox {
   margin-top: 6px; }
 
-div.content {
-  margin: 10px; }
-
 .topnbottom {
   margin: 6px 0px; }
 
@@ -36,16 +33,17 @@ article.text {
     position: absolute;
     top: 0px;
     right: 5px; }
-  article.text div.ctrls {
+  article.text form.ctrls {
     text-align: right;
+    margin-bottom: 0;
     overflow: hidden; }
-    article.text div.ctrls:after {
+    article.text form.ctrls:after {
       content: "";
       height: 0px;
       clear: both; }
-    article.text div.ctrls input {
+    article.text form.ctrls input {
       float: left; }
-    article.text div.ctrls a.btn {
+    article.text form.ctrls a.btn {
       float: right;
       margin: 0 3px; }
 
@@ -68,3 +66,6 @@ article.text {
     line-height: 1.6em;
     border: none;
     width: 100%; }
+
+[class*="span"] {
+  margin-left: 0; }

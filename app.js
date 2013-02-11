@@ -36,7 +36,7 @@ app.configure(function(){
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
-
+app.locals._ = _;
 
 // require models
 var mongoose = require('mongoose'),
@@ -53,7 +53,9 @@ app.get('/boxes/new', boxes_ctrl.newbox);
 app.post('/boxes/', boxes_ctrl.create);
 
 app.get('/:slug', boxes_ctrl.show);
-app.post('/:slug', boxes_ctrl.update);
+app.put('/:slug', boxes_ctrl.update);
+app.delete('/:slug', boxes_ctrl.remove);
+
 
 /*
 app.get("/history", function(req,res) {

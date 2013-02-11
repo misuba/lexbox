@@ -57,8 +57,8 @@ BoxSchema.pre('save', function (next) {
 });
 
 BoxSchema.virtual('displaySummary').get(function(){
-  if (this.summary == "" || this.summary == null) {
-    return this.body.substr(0,50);
+  if (!this.summary) {
+    return this.body;
   }
   return this.summary;
 });

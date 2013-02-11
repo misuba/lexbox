@@ -26,10 +26,6 @@ nav.ctrls {
   #dobox {margin-top: 6px;}
 }
 
-div.content {
-  margin: 10px;
-}
-
 .topnbottom {
   margin: 6px 0px;
 }
@@ -56,14 +52,20 @@ article.text {
     }
   }
 
+  .summary {
+    overflow: hidden;
+    height: 1.3em;
+  }
+
   .seltext {
     position: absolute;
     top: 0px;
     right: 5px;
   }
 
-  div.ctrls {
+  form.ctrls {
     text-align: right;
+    margin-bottom: 0;
     @include clearme;
     
     input {
@@ -106,4 +108,8 @@ article.text {
     }
 
   }
+}
+
+[class*="span"] {
+  margin-left: 0;
 }

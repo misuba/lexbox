@@ -2,7 +2,7 @@ extends layout
 
 block body
   div.container.edittext
-    form.row(method='post', action='/#{text ? text.name : 'boxes/'}')
+    form.row(method='post', action='/#{text && text.name.length ? text.slug : 'boxes/'}')
     
       nav.ctrls.span3
         h1: a(href='/') Lexbox
@@ -42,5 +42,5 @@ block body
           input#go(type='submit', name='go', value='Save')
 
         if text && text.name.length
-          input#id(type='hidden', name='id', value=text._id)
+          input#id(type='hidden', name='_method', value='PUT')
 

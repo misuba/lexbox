@@ -3,7 +3,7 @@ exports.control = function(models) {
       _ = require('underscore');
 
   function finish(res, err, tmpl, goods) {
-    res.render(tmpl, _.extend(goods, {err: err, _: _}));
+    res.render(tmpl, _.extend(goods, {err: err}));
   }
 
   function finishBoxToRoot(res, err, box) {
@@ -33,28 +33,36 @@ exports.control = function(models) {
     },
 
     create: function(req, res, callback) {
-      var nuu = new LBox({
+      LBox.create({
         name: req.body.name,
         summary: req.body.summary,
         body: req.body.body,
         tags: req.body.tags || []
-      });
-      nuu.save(function(err, box) {
+      }, function(err, box) {
+        console.log(box);
         finishBoxToRoot(res, err, box);
       });
     },
 
     update: function(req, res) {
-      LBox.update({_id: req.body.id}, { $set: {
-        name: req.body.name, summary: req.body.summary, body: req.body.body, tags: req.body.tags || []
-      } }, function(err, box) {
-        finishBoxToRoot(res, err, box);
+      console.log(req.params);
+      LBox.findOne({slug: req.params.slug}, function(err, box) {
+        box.name = req.body.name;
+        box.summary = req.body.summary;
+        box.body = req.body.body;
+        box.tags = req.body.tags || [];
+        box.save(function(saverr, savedbox) {
+          res.redirect("/");
+        });
       });
     },
 
-    remove: function(req, res, box) {
-      LBox.update({_id: box.id}, { $set: { alive: false } }, function(err, box) {
-        finishBoxToRoot(res, err, box);
+    remove: function(req, res) {
+      LBox.findOne({slug: req.params.slug}, function(err, box) {
+        box.alive = false;
+        box.save(function(saverr, savedbox) {
+          res.redirect("/");
+        });
       });
     },
 
