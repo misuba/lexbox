@@ -84,6 +84,16 @@ exports.control = function(models) {
           }
         }
       });
+    },
+
+    removetag: function(req, res) {
+      LBox.findOne({slug: req.params.slug}, function(err, box) {
+        var tagname = box.tags[parseInt(req.params.tagid)].name;
+        box.removeTag(tagname);
+        box.save(function(serr) {
+          finish(res, serr, 'text', {text: box});
+        });
+      });
     }
 
   };

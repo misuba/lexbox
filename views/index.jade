@@ -13,6 +13,10 @@ mixin renderBox(box)
     input.seltext(type='checkbox', name='boxids[]', value=box._id)
     .ctrls
       a.btn(href='/' + box.slug) Edit
+      if box.tags.length
+        span.tags Tags: 
+          - each tag in box.tags
+            em= tag.name
       input.btn.btn-danger.btn-mini(type='submit', name='del_'+box._id, value='x')
 
 block body

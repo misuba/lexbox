@@ -70,6 +70,8 @@ app.post('/boxes/manage', function(req, res) {
   }
 });
 
+app.get('/:slug/tags/:tagid/remove', boxes_ctrl.removetag);
+
 /*
 app.get("/history", function(req,res) {
   LEvent.getHistory(function(histerr, evts) {

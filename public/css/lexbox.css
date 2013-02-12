@@ -1,4 +1,4 @@
-nav.ctrls form {
+nav.ctrls p, nav.ctrls section {
   margin: 32px 0px; }
 nav.ctrls label {
   display: inline; }
@@ -14,6 +14,11 @@ section.boxes {
     content: "";
     height: 0px;
     clear: both; }
+
+section.tags .btn {
+  margin-left: 7px; }
+section.tags input {
+  display: block; }
 
 article.text {
   border: 1px solid black;
