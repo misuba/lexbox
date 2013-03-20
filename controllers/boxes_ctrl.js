@@ -3,19 +3,38 @@ exports.control = function(models) {
       _ = require('underscore');
 
   function finish(res, err, tmpl, goods) {
+    if (tmpl === null) tmpl = 'index';
+    if (goods === null) goods = {};
     res.render(tmpl, _.extend(goods, {err: err}));
   }
 
   function finishBoxToRoot(res, err, box) {
-    if (err) finish(res, err, "text", {text: box});
+    if (err) finish(res, err, 'text', {text: box});
     else res.redirect('/');
   }
 
+  function eachSelected(res, boxes, todo){
+    var box,
+        boxsavehandler = _.after(boxes.length, function(){res.redirect('/');});
+
+    for (var r = boxes.length; r > 0; r--) {
+      box = boxes[r - 1];
+      todo.call(box);
+      box.save(boxsavehandler);
+    }
+  }
+
   return {
+
+    withSelected: function(req, res, next) {
+      LBox.find({_id: { $in: req.body.boxids }}, function(err, boxes) {
+        if (err) res.redirect('/');
+        else next(req, res, boxes);
+      });
+    },
+
     index: function(req, res) {
-      LBox.findLiving(function(err, texts) { //.populate("children")
-        //if (err) errout(req, res, err, 'index', texts);
-        console.log("texts ===", texts);
+      LBox.findRoots(function(err, texts) {
         finish(res, err, 'index', {boxes: texts});
       });
     },
@@ -66,29 +85,35 @@ exports.control = function(models) {
       });
     },
 
-    tag: function(req, res) {
-      LBox.find({_id: { $in: req.body.boxids }}, function(err, boxes) {
-        if (err) res.redirect('/');
+    tag: function(req, res, boxes) {
+      eachSelected(res, boxes, function(){
+        this.addTag(req.body.tagname);
+      });
+    },
+
+    color: function(req, res, boxes) {
+      eachSelected(res, boxes, function(){
+        this.set('color', req.body.boxcolor);
+      });
+    },
+
+    move: function(req, res, boxes) {
+      console.log('boxctrl move',req.body);
+      LBox.findById(req.body.parentbox, function(err, parentbox) {
+        if (!err) {
+          var finisher = _.after(boxes.length, function(){ res.redirect('/'); });
+          _.each(boxes, function(box) { box.moveTo(parentbox, finisher); });
+        }
         else {
-          var box,
-              saveCt = 0,
-              boxsavehandler = function(serr) {
-                if (!serr) {
-                  if (++saveCt == boxes.length) res.redirect('/');
-                }
-              };
-          for (var r = boxes.length; r > 0; r--) {
-            box = boxes[r - 1];
-            box.addTag(req.body.tagname);
-            box.save(boxsavehandler);
-          }
+          console.log("move err", err);
+          res.redirect('/');
         }
       });
     },
 
     removetag: function(req, res) {
       LBox.findOne({slug: req.params.slug}, function(err, box) {
-        var tagname = box.tags[parseInt(req.params.tagid)].name;
+        var tagname = box.tags[parseInt(req.params.tagid, 10)].name;
         box.removeTag(tagname);
         box.save(function(serr) {
           finish(res, serr, 'text', {text: box});

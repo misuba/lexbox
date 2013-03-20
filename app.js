@@ -3,11 +3,11 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , http = require('http')
-  , path = require('path')
-  , fs = require('fs')
-  , _ = require('underscore');
+var express = require('express'),
+    http = require('http'),
+    path = require('path'),
+    fs = require('fs'),
+    _ = require('underscore');
 
 var app = express();
 
@@ -19,10 +19,10 @@ var LConf = JSON.parse(fs.readFileSync("./config.json"));
 // the cookie parser secret should be changed for every install in config.json
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
-  
+
   app.set("view engine", "jade");
   app.set('views', __dirname + '/views');
-  
+
   app.set("mongo_url", LConf.MONGO_URL);
 
   app.use(express.favicon());
@@ -60,13 +60,19 @@ app.post('/boxes/manage', function(req, res) {
   var dels = _.filter(_.keys(req.body), function(key){
     return key.indexOf("del_")===0;
   });
-  
+
   if (dels.length) {
     var del = dels[0].match(/del_(.+)/)[1];
     boxes_ctrl.remove(req, res, del);
   }
-  else if (req.body.dotags == 'Do it') {
-    boxes_ctrl.tag(req, res);
+  else if (req.body.dotags === 'Do it') {
+    boxes_ctrl.withSelected(req, res, boxes_ctrl.tag);
+  }
+  else if (req.body.colorbox === 'Do it') {
+    boxes_ctrl.withSelected(req, res, boxes_ctrl.color);
+  }
+  else if (req.body.reparent === 'Do it') {
+    boxes_ctrl.withSelected(req, res, boxes_ctrl.move);
   }
 });
 

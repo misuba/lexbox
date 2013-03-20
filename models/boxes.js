@@ -32,11 +32,13 @@ BoxSchema.add({
   body: String,
   summary: String,
   tags: [{name: String}],
+  color: String,
 
   alive: { type: Boolean, default: true },
   hideChildren: { type: Boolean, default: false },
 
-  children: [{ type: Schema.Types.ObjectId, ref: 'LBox' }]
+  children: [{ type: Schema.Types.ObjectId, ref: 'LBox' }],
+  root: { type: Boolean, default: true }
 });
 
 
@@ -90,6 +92,7 @@ BoxSchema.methods.getChild = function(index, callback){
   this.constructor.findOne({_id: this.children[index]}, callback);
 };
 BoxSchema.methods.addChild = function(obj, callback) {
+  obj['root'] = false;
   var self = this;
   new this.constructor(obj).save(function(err, newmodel) {
     if (err) return callback(err);
@@ -102,23 +105,47 @@ BoxSchema.methods.addChild = function(obj, callback) {
 };
 
 BoxSchema.methods.moveTo = function(newparent, index, callback) {
+  var realindex = index;
+  if (typeof index === 'function') {
+    realindex = null;
+    callback = index;
+  }
+
   var mover = this;
   this.getParent(function(err, parent) {
     if (err) callback(err);
     else {
-      parent.children.remove(mover._id);
-      
-      var dest = parent;
-      if (newparent !== null) dest = newparent;
-      dest.children.splice(index, 0, mover._id);
+      if (parent !== null)
+        parent.children.remove(mover._id);
 
-      if (dest._id == parent._id) {
-        dest.save(callback);
+      var dest = newparent;
+
+      if (dest !== null) {
+
+        if (realindex === null) realindex = dest.children.length;
+        dest.children.splice(realindex, 0, mover._id);
+
+        mover.set('root', false);
+        mover.save(function(moverr) {
+          if (moverr) callback(moverr);
+          else {
+            if (parent === null || dest._id == parent._id) {
+              dest.save(callback);
+            }
+            else {
+              parent.save(function(perr) {
+                if (perr) callback(perr);
+                else dest.save(callback);
+              });
+            }
+          }
+        });
       }
       else {
-        parent.save(function(perr) {
-          if (perr) callback(perr);
-          else dest.save(callback);
+        mover.set('root', true);
+        mover.save(function(err) {
+          if (err || parent === null) callback(err);
+          else parent.save(callback);
         });
       }
     }
@@ -127,6 +154,10 @@ BoxSchema.methods.moveTo = function(newparent, index, callback) {
 
 BoxSchema.static('findLiving', function (callback) {
   return this.find({ alive: true }).populate("children").exec(callback);
+});
+
+BoxSchema.static('findRoots', function (callback) {
+  return this.find({ root: true }).populate("children").exec(callback);
 });
 
 exports.schema = BoxSchema;

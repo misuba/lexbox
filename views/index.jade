@@ -38,7 +38,15 @@ block body
             label(for='boxcolor') Color selected:
             input#boxcolor(type='text', name='boxcolor', value='', placeholder='hex or English')
             br
-            input#colorbox(type='submit', name='colorbox', value='Paint')
+            input#colorbox(type='submit', name='colorbox', value='Do it')
+
+          p
+            label(for='parentbox') Move selected into:
+            select#parentbox(name='parentbox')
+              - each box in boxes
+                option(value=box.id)= box.name
+            br
+            input#reparent(type='submit', name='reparent', value='Do it')
 
 
       .content.span9
